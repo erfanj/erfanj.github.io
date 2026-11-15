@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zipper — Archive manager for Mac</title>
+  <meta name="description" content="Zipper creates, opens, tests and converts almost every archive format on your Mac, in one calm window. Safe by default, private, and made for macOS.">
+  <meta name="theme-color" content="#fbfbfd" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0a0a0f" media="(prefers-color-scheme: dark)">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Zipper — Every archive. One calm window.">
+  <meta property="og:description" content="A native archive manager for the Mac. ZIP, 7z, RAR, TAR and dozens more. Safe by default. Part of The Basics Well Made Series.">
+  <meta property="og:url" content="https://erfanj.github.io/zipper/">
+  <meta property="og:image" content="https://erfanj.github.io/zipper/assets/og.jpg">
+  <link rel="canonical" href="https://erfanj.github.io/zipper/">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/icon-256.png">
+  <link rel="stylesheet" href="styles.css">
+  <script src="config.js"></script>
+  <script src="main.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- Icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3.5v11"/><path d="m7.5 10.5 4.5 4.5 4.5-4.5"/><path d="M4.5 16.5v2a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-2"/></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="5" rx="1.2"/><path d="M5 9v9.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V9"/><path d="M10 13h4"/></symbol>
+    <symbol id="i-extract" viewBox="0 0 24 24"><path d="M4 14v4.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V14"/><path d="M4 14h4l1.5 2h5L16 14h4"/><path d="M12 11V3.5"/><path d="m8.5 7 3.5-3.5L15.5 7"/></symbol>
+    <symbol id="i-open" viewBox="0 0 24 24"><path d="M13.5 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h4"/><path d="M13.5 3 19 8.5V11"/><circle cx="16" cy="16" r="3.2"/><path d="m18.4 18.4 2.4 2.4"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3.5 11 12 4l8.5 7"/><path d="M5.5 9.5V20h4.5v-5.5h4V20h4.5V9.5"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-folder" viewBox="0 0 24 24"><path d="M2.5 6.5A1.5 1.5 0 0 1 4 5h5.2l2 2.2H20a1.5 1.5 0 0 1 1.5 1.5v9.8A1.5 1.5 0 0 1 20 20H4a1.5 1.5 0 0 1-1.5-1.5z"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v11.5a1.5 1.5 0 0 1-1.5 1.5h-10A1.5 1.5 0 0 1 6 19.5v-15A1.5 1.5 0 0 1 7 3z"/><path d="M14 3v5h5"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5"/><path d="M12 7.6v.1"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6.5h11M9 12h11M9 17.5h11"/><path d="M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01"/></symbol>
+    <symbol id="i-columns" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="1.5"/><path d="M9.2 5v14M14.8 5v14"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.2"/></symbol>
+    <symbol id="i-folder-plus" viewBox="0 0 24 24"><path d="M2.5 6.5A1.5 1.5 0 0 1 4 5h5.2l2 2.2H20a1.5 1.5 0 0 1 1.5 1.5v9.8A1.5 1.5 0 0 1 20 20H4a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M12 11v6M9 14h6"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-updown" viewBox="0 0 24 24"><path d="m7 9.5 5-5 5 5M7 14.5l5 5 5-5"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m8.2 12.3 2.6 2.6 5-5.3"/></symbol>
+    <symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="m9 9 6 6M15 9l-6 6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.5 6v5.5c0 4.6 3.2 8.2 7.5 9.5 4.3-1.3 7.5-4.9 7.5-9.5V6z"/><path d="m8.8 12.2 2.3 2.3 4.2-4.4"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 8.5-8.5M16 7l2.5 2.5M14 9l2 2"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3.5 9 4.5-9 4.5L3 8z"/><path d="m3 12.5 9 4.5 9-4.5"/><path d="m3 16.5 9 4.5 9-4.5"/></symbol>
+    <symbol id="i-cursor" viewBox="0 0 24 24"><rect x="9" y="3.5" width="11.5" height="13" rx="2"/><path d="M12 7.5h5.5M12 10.5h5.5M12 13.5h3.5"/><path d="m3.5 11 3 9 1.5-3.8 3.8-1.5z"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a4 4 0 0 0 5 5L21 10a5.5 5.5 0 0 1-7.2 3.4l-7 7a2 2 0 0 1-2.8-2.8l7-7A5.5 5.5 0 0 1 14 3l-1.3 1.3a4 4 0 0 0 2 2z"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="M3.5 3.5 20.5 20.5"/><path d="M10.6 5.6A9.6 9.6 0 0 1 12 5.5c5 0 8.5 4.5 9.5 6.5a14 14 0 0 1-3 3.8M6.3 7.3C4.3 8.6 3 10.6 2.5 12c1 2 4.5 6.5 9.5 6.5a9.3 9.3 0 0 0 4.3-1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="15" rx="2"/><path d="m7 9.5 3 2.5-3 2.5M12.5 15h4.5"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 13.5h6L10 21l8-10.5h-6z"/></symbol>
+    <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3.5c.6 3.9 2.3 5.6 6.2 6.2-3.9.6-5.6 2.3-6.2 6.2-.6-3.9-2.3-5.6-6.2-6.2C9.7 9.1 11.4 7.4 12 3.5z"/><path d="M18.5 15.5c.3 1.6.9 2.2 2.5 2.5-1.6.3-2.2.9-2.5 2.5-.3-1.6-.9-2.2-2.5-2.5 1.6-.3 2.2-.9 2.5-2.5z"/></symbol>
+    <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h14l-3.5-3.5M20 16H6l3.5 3.5"/></symbol>
+    <symbol id="i-warn" viewBox="0 0 24 24"><path d="M10.3 4.3 2.8 17.5A2 2 0 0 0 4.5 20.5h15a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0z"/><path d="M12 9.5v4.5M12 17.2v.1"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+    <symbol id="i-apps" viewBox="0 0 24 24"><path d="M2.5 6.5A1.5 1.5 0 0 1 4 5h5.2l2 2.2H20a1.5 1.5 0 0 1 1.5 1.5v9.8A1.5 1.5 0 0 1 20 20H4a1.5 1.5 0 0 1-1.5-1.5z" fill="currentColor" stroke="none"/><path d="M9.5 16.5 12 11l2.5 5.5M10.3 15h3.4" stroke="#fff" stroke-width="1.5"/></symbol>
+  </defs>
+</svg>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="lockup" href="#top" aria-label="Zipper, from The Basics Well Made Series">
+      <img src="assets/icon-256.png" alt="" width="32" height="32">
+      <span class="lockup-text">
+        <span class="lockup-name">Zipper</span>
+        <span class="lockup-series">Basics Well Made</span>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="Sections">
+      <a href="#features">Features</a>
+      <a href="#screenshots">Screenshots</a>
+      <a href="#install">Install</a>
+    </nav>
+    <a class="btn btn-primary btn-sm" data-download href="#install">
+      <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download
+    </a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ Hero ============ -->
+  <section class="hero" id="top">
+    <div class="wrap">
+      <img class="hero-icon" src="assets/icon-512.png" alt="" width="112" height="112">
+      <p class="eyebrow">Archive manager for macOS</p>
+      <h1>Every archive. <span class="grad">One calm window.</span></h1>
+      <p class="lede">Zipper creates, opens, tests and converts almost every archive format on your Mac. It looks inside archives like Finder does, and it’s safe by default.</p>
+      <div class="cta">
+        <a class="btn btn-primary btn-lg" data-download href="#install">
+          <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download for Mac
+        </a>
+        <a class="btn btn-ghost" href="#install">How to install</a>
+      </div>
+      <p class="release-meta" data-release-meta>macOS 14 Sonoma or later · Apple silicon &amp; Intel</p>
+
+      <div class="hero-shot" data-reveal>
+        <div class="frame" data-frame data-w="960" data-h="600">
+          <img class="shot" src="assets/screenshots/archive.png" alt="Zipper showing the contents of an archive" onload="this.parentNode.classList.add('real')" onerror="this.remove()">
+          <div class="win" role="img" aria-label="Zipper’s archive browser: a 7z archive opened like a Finder folder, with a Quick Look preview of a PDF inside it">
+            <aside class="w-side">
+              <div class="lights"><i></i><i></i><i></i></div>
+              <div class="w-item"><svg class="icon"><use href="#i-home"/></svg>Home</div>
+              <div class="w-head">Archives</div>
+              <div class="w-item sel"><svg class="icon"><use href="#i-archive"/></svg>Project Assets.7z<span class="x">✕</span></div>
+              <div class="w-item"><svg class="icon"><use href="#i-archive"/></svg>Photos 2026.zip</div>
+              <div class="w-item"><svg class="icon"><use href="#i-archive"/></svg>site-backup.tar.zst</div>
+              <div class="w-item bottom"><svg class="icon"><use href="#i-clock"/></svg>Activity</div>
+            </aside>
+            <div class="w-main">
+              <div class="w-tool">
+                <div class="w-title">Project Assets.7z<small>7z · AES-256 · 8 items</small></div>
+                <span class="w-btn prom"><svg class="icon"><use href="#i-extract"/></svg>Extract</span>
+                <span class="w-btn"><svg class="icon"><use href="#i-folder-plus"/></svg>Extract To…</span>
+                <span class="w-btn"><svg class="icon"><use href="#i-plus"/></svg>Add</span>
+                <span class="w-seg"><span class="on"><svg class="icon"><use href="#i-list"/></svg></span><span><svg class="icon"><use href="#i-columns"/></svg></span><span><svg class="icon"><use href="#i-grid"/></svg></span></span>
+                <span class="w-btn"><svg class="icon"><use href="#i-info"/></svg></span>
+                <span class="w-btn"><svg class="icon"><use href="#i-more"/></svg></span>
+              </div>
+              <div class="w-path"><svg class="icon"><use href="#i-archive"/></svg>Project Assets.7z<svg class="icon"><use href="#i-chev"/></svg><b>Launch</b></div>
+              <div class="w-table">
+                <div class="w-row th"><span>Name</span><span class="r">Size</span><span class="r">Compressed</span><span>Kind</span><span>Date Modified</span></div>
+                <div class="w-row"><span class="n"><svg class="icon solid f"><use href="#i-folder"/></svg>Design</span><span class="r m">--</span><span class="r m">--</span><span class="m">Folder</span><span class="m">Oct 28, 2026 at 4:12 PM</span></div>
+                <div class="w-row"><span class="n"><svg class="icon solid f"><use href="#i-folder"/></svg>Footage</span><span class="r m">--</span><span class="r m">--</span><span class="m">Folder</span><span class="m">Oct 27, 2026 at 9:40 AM</span></div>
+                <div class="w-row"><span class="n"><svg class="icon solid f"><use href="#i-folder"/></svg>Contracts<svg class="icon lock"><use href="#i-lock"/></svg></span><span class="r m">--</span><span class="r m">--</span><span class="m">Folder</span><span class="m">Oct 22, 2026 at 6:05 PM</span></div>
+                <div class="w-row sel"><span class="n"><svg class="icon d"><use href="#i-doc"/></svg>Brand Guidelines.pdf</span><span class="r">24.6 MB</span><span class="r m">21.9 MB</span><span class="m">PDF document</span><span class="m">Oct 27, 2026 at 3:18 PM</span></div>
+                <div class="w-row"><span class="n"><svg class="icon d"><use href="#i-doc"/></svg>Launch Plan.key</span><span class="r">48.2 MB</span><span class="r m">46.8 MB</span><span class="m">Keynote presentation</span><span class="m">Oct 26, 2026 at 11:02 AM</span></div>
+                <div class="w-row"><span class="n"><svg class="icon d"><use href="#i-doc"/></svg>Budget 2027.numbers<svg class="icon lock"><use href="#i-lock"/></svg></span><span class="r">1.2 MB</span><span class="r m">412 KB</span><span class="m">Numbers spreadsheet</span><span class="m">Oct 25, 2026 at 8:47 PM</span></div>
+                <div class="w-row"><span class="n"><svg class="icon d"><use href="#i-doc"/></svg>Logo Final.svg</span><span class="r">184 KB</span><span class="r m">41 KB</span><span class="m">SVG image</span><span class="m">Oct 24, 2026 at 2:30 PM</span></div>
+                <div class="w-row"><span class="n"><svg class="icon d"><use href="#i-doc"/></svg>README.txt</span><span class="r">4 KB</span><span class="r m">2 KB</span><span class="m">Plain text</span><span class="m">Oct 20, 2026 at 10:15 AM</span></div>
+              </div>
+              <div class="w-status"><svg class="icon"><use href="#i-lock"/></svg>Encrypted, file names hidden · 74.2 MB, 69.2 MB compressed<span class="ok"><svg class="icon"><use href="#i-check-circle"/></svg>Integrity OK</span></div>
+
+              <div class="w-hint"><kbd>Space</kbd> Quick Look</div>
+              <div class="w-ql">
+                <div class="w-ql-bar"><span class="lights"><i></i><i></i><i></i></span>Brand Guidelines.pdf</div>
+                <div class="w-ql-page">
+                  <div><b>Brand<br>Guidelines</b></div>
+                  <div class="w-ql-lines"><i style="width:80%"></i><i style="width:64%"></i><i style="width:72%"></i><small>Version 3 · 2027</small></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Formats ============ -->
+  <section class="formats" aria-labelledby="formats-title">
+    <div class="wrap">
+      <p id="formats-title">The formats you actually run into, and plenty you don’t</p>
+      <ul class="chips">
+        <li>ZIP</li><li>7Z</li><li>RAR</li><li>TAR.GZ</li><li>TAR.XZ</li><li>TAR.ZST</li><li>TAR.BZ2</li><li>TAR.LZ4</li><li>ISO</li><li>DMG</li><li>CAB</li><li>LZH</li><li>ARJ</li><li>CPIO</li><li>XAR</li><li>ZPAQ</li><li>EPUB</li><li>CBZ</li><li>DEB</li>
+        <li class="more">97 formats recognised</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ Features ============ -->
+  <section class="section" id="features">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <h2>The basics, done properly.</h2>
+        <p>Everything you need from an archive tool, built natively for the Mac and kept out of your way.</p>
+      </div>
+
+      <div class="spotlight" data-reveal>
+        <div class="spot-text">
+          <div class="badge-icon"><svg class="icon" aria-hidden="true"><use href="#i-open"/></svg></div>
+          <h3>Look inside, like Finder.</h3>
+          <p>Double-click an archive and browse it like a folder, without extracting anything first.</p>
+          <ul class="ticks">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>List, column and icon views, with a path bar</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Press <kbd>Space</kbd> to Quick Look any file inside</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span>Drag files out to extract them, drop files in to add them</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg><span><b>Extract All</b> puts files next to the archive, with no folder inside a folder</span></li>
+          </ul>
+        </div>
+        <div class="shield-card">
+          <h4>Edit an archive without risking it</h4>
+          <ul class="blocked">
+            <li><svg class="icon" style="color:var(--accent)" aria-hidden="true"><use href="#i-plus"/></svg><span>Add, rename, move or delete items</span><span class="pill">Rebuilt</span></li>
+            <li><svg class="icon" style="color:var(--accent)" aria-hidden="true"><use href="#i-check-circle"/></svg><span>The new archive is tested before it’s used</span><span class="pill">Verified</span></li>
+            <li><svg class="icon" style="color:var(--accent)" aria-hidden="true"><use href="#i-swap"/></svg><span>Swapped in atomically; if anything fails, your original stays byte-for-byte identical</span><span class="pill">Safe</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="spotlight flip" data-reveal>
+        <div class="spot-text">
+          <div class="badge-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></div>
+          <h3>Safe by default.</h3>
+          <p>Archives from the internet can be hostile. Every file Zipper extracts, whichever engine read it, goes through one checked path that refuses anything that could harm your Mac.</p>
+          <p>It’s tested against hostile archives and mutation fuzzing. Apps and scripts inside an archive are never opened automatically.</p>
+        </div>
+        <div class="shield-card">
+          <h4>What Zipper refuses to extract</h4>
+          <ul class="blocked">
+            <li><svg class="icon" aria-hidden="true"><use href="#i-x-circle"/></svg><span>Path traversal <code>../../Library/LaunchAgents</code></span><span class="pill">Blocked</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-x-circle"/></svg><span>Symlinks that escape the destination</span><span class="pill">Blocked</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-x-circle"/></svg><span>Zip bombs: size, ratio, count and depth limits</span><span class="pill">Blocked</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-x-circle"/></svg><span>setuid bits and device files</span><span class="pill">Blocked</span></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-x-circle"/></svg><span>Extractions larger than your free disk space</span><span class="pill">Blocked</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-key"/></svg>
+          <h3>Real encryption</h3>
+          <p>AES-256 ZIP that 7-Zip can open, and 7z with hidden file names. Passwords never appear on a command line and are saved to your Keychain only if you ask.</p>
+        </article>
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-cursor"/></svg>
+          <h3>Right inside Finder</h3>
+          <p>Quick Actions like Compress to ZIP, Extract Here and Extract To…, a Space-bar preview of any archive, and actions for the Shortcuts app.</p>
+        </article>
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-sparkle"/></svg>
+          <h3>Three choices, not thirty</h3>
+          <p>Pick a format, then Faster, Normal or Smaller. Dictionary sizes, solid blocks and threads are there when you want them, tucked out of the way.</p>
+        </article>
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-wrench"/></svg>
+          <h3>A real toolbox</h3>
+          <p>Test integrity, repair damaged ZIPs, convert between formats with SHA-256 verification, split and join, checksums, compare archives and find duplicates.</p>
+        </article>
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg>
+          <h3>Big files, small footprint</h3>
+          <p>Files over 4 GB, flat memory use while streaming, and cancelling that never leaves half-written output behind.</p>
+        </article>
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-eye-off"/></svg>
+          <h3>Private by design</h3>
+          <p>Everything happens on your Mac. Zipper has no network code, no analytics and no update checks. It works fully offline.</p>
+        </article>
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-layers"/></svg>
+          <h3>Plays well with others</h3>
+          <p>Archives Zipper writes open correctly in Info-ZIP, 7-Zip, GNU tar and Python. RAR 2–5 opens too, including solid, encrypted and multi-volume sets.</p>
+        </article>
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-terminal"/></svg>
+          <h3>A command line, too</h3>
+          <p>The <code>zipper</code> tool is built in: compress, extract with verification, and list what your Mac can read and write.</p>
+        </article>
+        <article class="card" data-reveal>
+          <svg class="icon" aria-hidden="true"><use href="#i-search"/></svg>
+          <h3>Native, not a port</h3>
+          <p>Written in Swift and SwiftUI with standard menus and shortcuts, Light and Dark Mode, and a universal build for Apple silicon and Intel.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Screenshots ============ -->
+  <section class="section section-alt" id="screenshots">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <h2>Simple until you need more.</h2>
+        <p>One window, a few focused sheets, and nothing to configure before you start.</p>
+      </div>
+
+      <div class="tablist" role="tablist" aria-label="Screens">
+        <button role="tab" id="tab-home" aria-controls="panel-home" aria-selected="true">Home</button>
+        <button role="tab" id="tab-compress" aria-controls="panel-compress" aria-selected="false" tabindex="-1">Compress</button>
+        <button role="tab" id="tab-extract" aria-controls="panel-extract" aria-selected="false" tabindex="-1">Extract</button>
+      </div>
+
+      <!-- Home -->
+      <figure class="tabpanel shot-wrap" role="tabpanel" id="panel-home" aria-labelledby="tab-home" style="margin:0 auto">
+        <div class="frame" data-frame data-w="960" data-h="600">
+          <img class="shot" src="assets/screenshots/home.png" alt="Zipper’s Home window" onload="this.parentNode.classList.add('real')" onerror="this.remove()">
+          <div class="win" role="img" aria-label="Zipper’s Home window with Compress, Extract and Open, and a list of recent archives">
+            <aside class="w-side">
+              <div class="lights"><i></i><i></i><i></i></div>
+              <div class="w-item sel"><svg class="icon"><use href="#i-home"/></svg>Home</div>
+              <div class="w-head">Archives</div>
+              <div class="w-item"><svg class="icon"><use href="#i-archive"/></svg>Project Assets.7z</div>
+              <div class="w-item bottom"><svg class="icon"><use href="#i-clock"/></svg>Activity</div>
+            </aside>
+            <div class="w-main">
+              <div class="w-tool">
+                <div class="w-title">Zipper</div>
+                <span class="w-btn"><svg class="icon"><use href="#i-archive"/></svg>Compress</span>
+                <span class="w-btn"><svg class="icon"><use href="#i-extract"/></svg>Extract</span>
+                <span class="w-btn"><svg class="icon"><use href="#i-open"/></svg>Open</span>
+                <span class="w-btn"><svg class="icon"><use href="#i-wrench"/></svg>Tools</span>
+                <span class="w-btn"><svg class="icon"><use href="#i-clock"/></svg></span>
+              </div>
+              <div class="w-home">
+                <img src="assets/icon-256.png" alt="" width="84" height="84">
+                <h5>Zipper</h5>
+                <p>Drop files here to compress them, or drop an archive to open it.</p>
+                <div class="w-cards">
+                  <div class="w-card"><svg class="icon"><use href="#i-archive"/></svg><b>Compress</b><span>Make an archive from files and folders</span></div>
+                  <div class="w-card"><svg class="icon"><use href="#i-extract"/></svg><b>Extract</b><span>Get the files out of an archive</span></div>
+                  <div class="w-card"><svg class="icon"><use href="#i-open"/></svg><b>Open</b><span>Look inside without extracting</span></div>
+                </div>
+                <div class="w-recent">
+                  <div class="w-recent-head">Recent Archives<span>Clear</span></div>
+                  <div>
+                    <div class="w-recent-row"><svg class="icon"><use href="#i-archive"/></svg><div>Project Assets.7z<small>~/Desktop</small></div></div>
+                    <div class="w-recent-row"><svg class="icon"><use href="#i-archive"/></svg><div>Photos 2026.zip<small>~/Pictures/Exports</small></div></div>
+                    <div class="w-recent-row"><svg class="icon"><use href="#i-archive"/></svg><div>Client Delivery.part1.rar<small>~/Downloads</small></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption>Drop anything on the window: files get compressed, archives get opened.</figcaption>
+      </figure>
+
+      <!-- Compress -->
+      <figure class="tabpanel shot-wrap" role="tabpanel" id="panel-compress" aria-labelledby="tab-compress" hidden style="margin:0 auto">
+        <div class="frame" data-frame data-w="960" data-h="600">
+          <img class="shot" src="assets/screenshots/compress.png" alt="Zipper’s Compress sheet" onload="this.parentNode.classList.add('real')" onerror="this.remove()">
+          <div class="win" role="img" aria-label="The Compress sheet: 7z format, Smaller compression, encrypted with AES-256 and hidden file names">
+            <aside class="w-side">
+              <div class="lights"><i></i><i></i><i></i></div>
+              <div class="w-item sel"><svg class="icon"><use href="#i-home"/></svg>Home</div>
+              <div class="w-head">Archives</div>
+              <div class="w-item"><svg class="icon"><use href="#i-archive"/></svg>Project Assets.7z</div>
+              <div class="w-item bottom"><svg class="icon"><use href="#i-clock"/></svg>Activity</div>
+            </aside>
+            <div class="w-main">
+              <div class="w-tool"><div class="w-title">Zipper</div></div>
+              <div class="w-ghost"><i style="width:40%"></i><i style="width:70%"></i><i style="width:55%"></i></div>
+              <div class="w-dim"></div>
+              <div class="w-sheet">
+                <div class="w-sheet-head">
+                  <span class="stack"><svg class="icon"><use href="#i-folder"/></svg></span>
+                  <div><b>Q4 Report and 3 more</b><small>214 files, 12 folders · 1.8 GB</small></div>
+                  <span class="w-push">Add…</span>
+                </div>
+                <div class="w-group">
+                  <div class="w-f"><span>Name</span><span class="w-field">Q4 Report</span></div>
+                  <div class="w-f"><span>Format</span><span class="w-pop">7z (.7z)<svg class="icon"><use href="#i-updown"/></svg></span></div>
+                  <div class="w-f"><span>Compression</span><span class="w-seg3"><span>Faster</span><span>Normal</span><span class="on">Smaller</span></span></div>
+                </div>
+                <div class="w-group">
+                  <div class="w-f"><span>Encrypt with a password</span><span class="w-tog on"></span></div>
+                  <div class="w-f sub"><span>Password</span><span class="w-field dots">••••••••••••</span></div>
+                  <div class="w-f sub"><span>Encryption</span><span class="w-pop">AES-256<svg class="icon"><use href="#i-updown"/></svg></span></div>
+                  <div class="w-f sub"><span>Also hide the file names</span><span class="w-tog on"></span></div>
+                </div>
+                <div class="w-group">
+                  <div class="w-f"><span>Split into parts</span><span class="w-tog"></span></div>
+                  <div class="w-f"><span>Check the archive after creating it</span><span class="w-tog on"></span></div>
+                </div>
+                <div class="w-sheet-foot">
+                  <span class="w-pop sp">Presets<svg class="icon"><use href="#i-updown"/></svg></span>
+                  <span class="w-push">Cancel</span>
+                  <span class="w-push def">Compress</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption>A format, a speed, and an optional password. Advanced options appear only where they apply.</figcaption>
+      </figure>
+
+      <!-- Extract -->
+      <figure class="tabpanel shot-wrap" role="tabpanel" id="panel-extract" aria-labelledby="tab-extract" hidden style="margin:0 auto">
+        <div class="frame" data-frame data-w="960" data-h="600">
+          <img class="shot" src="assets/screenshots/extract.png" alt="Zipper’s Extract sheet" onload="this.parentNode.classList.add('real')" onerror="this.remove()">
+          <div class="win" role="img" aria-label="The Extract sheet for a password-protected, multi-part RAR archive">
+            <aside class="w-side">
+              <div class="lights"><i></i><i></i><i></i></div>
+              <div class="w-item sel"><svg class="icon"><use href="#i-home"/></svg>Home</div>
+              <div class="w-head">Archives</div>
+              <div class="w-item"><svg class="icon"><use href="#i-archive"/></svg>Project Assets.7z</div>
+              <div class="w-item bottom"><svg class="icon"><use href="#i-clock"/></svg>Activity</div>
+            </aside>
+            <div class="w-main">
+              <div class="w-tool"><div class="w-title">Zipper</div></div>
+              <div class="w-ghost"><i style="width:40%"></i><i style="width:70%"></i><i style="width:55%"></i></div>
+              <div class="w-dim"></div>
+              <div class="w-sheet">
+                <div class="w-sheet-head">
+                  <span class="stack"><svg class="icon"><use href="#i-archive"/></svg></span>
+                  <div><b>Client Delivery.part1.rar</b><small>1,204 files, 87 folders · 3.4 GB · 5 parts</small></div>
+                </div>
+                <div class="w-note"><svg class="icon"><use href="#i-lock"/></svg>Protected with a password. You’ll be asked for it when extraction starts.</div>
+                <div class="w-group">
+                  <div class="w-f"><span>Folders</span><span class="w-pop">Automatic<svg class="icon"><use href="#i-updown"/></svg></span></div>
+                  <div class="w-f"><span>If an item exists</span><span class="w-pop">Keep Both<svg class="icon"><use href="#i-updown"/></svg></span></div>
+                </div>
+                <div class="w-group">
+                  <div class="w-f"><span>Show in Finder when done</span><span class="w-tog on"></span></div>
+                  <div class="w-f"><span>Check the extracted files</span><span class="w-tog on"></span></div>
+                  <div class="w-f"><span>Also extract archives inside this archive</span><span class="w-tog"></span></div>
+                  <div class="w-f"><span>Move the archive to the Trash afterwards</span><span class="w-tog"></span></div>
+                </div>
+                <div class="w-sheet-foot">
+                  <span class="w-push sp">Show Contents</span>
+                  <span class="w-push">Cancel</span>
+                  <span class="w-push def">Extract</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption>Multi-part and encrypted archives just work. Nothing is overwritten unless you say so.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ Install ============ -->
+  <section class="section" id="install">
+    <div class="wrap">
+      <div class="section-head" data-reveal>
+        <h2>Installed in a minute.</h2>
+        <p>Universal for Apple silicon and Intel Macs, on macOS 14 Sonoma or later.</p>
+      </div>
+
+      <ol class="steps">
+        <li class="step" data-reveal>
+          <h3>Download</h3>
+          <p>Get the latest Zipper disk image.</p>
+          <a class="btn btn-primary" data-download href="#install">
+            <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg><span data-dmg-name>Download Zipper</span>
+          </a>
+          <p style="margin-top:12px;font-size:13px"><a data-checksum hidden href="#" style="color:var(--muted)">SHA-256 checksum</a></p>
+        </li>
+        <li class="step" data-reveal>
+          <h3>Drag to Applications</h3>
+          <p>Open the disk image and drag Zipper onto the Applications folder.</p>
+          <div class="step-visual">
+            <div class="dmg-visual" aria-hidden="true">
+              <img src="assets/icon-256.png" alt="" width="56" height="56">
+              <svg class="icon arrow"><use href="#i-chev"/></svg>
+              <svg class="apps-folder" viewBox="0 0 24 24"><use href="#i-apps"/></svg>
+            </div>
+          </div>
+        </li>
+        <li class="step" data-reveal>
+          <h3>Open it</h3>
+          <p>Launch Zipper from Applications or Spotlight, then drop in your first archive.</p>
+          <div class="step-visual">
+            <div class="launch-visual" aria-hidden="true">
+              <svg class="icon"><use href="#i-search"/></svg>
+              <img src="assets/icon-256.png" alt="" width="28" height="28">
+              <span>Zipper</span>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="notice" data-unsigned-only data-reveal>
+        <svg class="icon" aria-hidden="true"><use href="#i-warn"/></svg>
+        <div>
+          <h3>If macOS says it can’t verify Zipper</h3>
+          <p>This build isn’t notarized by Apple yet, so the first launch needs one extra step:</p>
+          <ol>
+            <li>Open Zipper once and click <b>Done</b> when macOS warns you.</li>
+            <li>Open <b>System Settings › Privacy &amp; Security</b> and scroll down.</li>
+            <li>Next to the message about Zipper, click <b>Open Anyway</b> and confirm with your password.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="extras" data-reveal>
+        <div>
+          <h3>Make it yours</h3>
+          <dl>
+            <div><dt>Finder Quick Actions</dt><dd>Control-click files in Finder and look under Quick Actions. Choose which ones appear in Zipper’s Settings › General.</dd></div>
+            <div><dt>Default app for archives</dt><dd>Settings › General › Open Archives with Zipper. Zipper never changes your defaults on its own.</dd></div>
+            <div><dt>Command-line tool</dt><dd>Settings › Advanced › Command line shows how to link <code>zipper</code> into your path.</dd></div>
+          </dl>
+        </div>
+        <div>
+          <h3>Optional extras</h3>
+          <dl>
+            <div><dt>Legacy formats</dt><dd>Install The Unarchiver’s tools with <code>brew install unar</code> for StuffIt, Compact Pro, Zoo, Amiga formats and more.</dd></div>
+            <div><dt>More engines</dt><dd><code>brew install zpaq lrzip lzop</code> adds those formats.</dd></div>
+            <div><dt>Creating RAR archives</dt><dd>Install and license RARLAB’s <code>rar</code>, and Zipper will use it.</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Final CTA ============ -->
+  <section class="final section-alt">
+    <div class="wrap" data-reveal>
+      <img src="assets/icon-512.png" alt="" width="96" height="96">
+      <h2>Make archives boring again.</h2>
+      <p>In the best possible way.</p>
+      <a class="btn btn-primary btn-lg" data-download href="#install">
+        <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>Download for Mac
+      </a>
+      <p class="release-meta" data-release-meta>macOS 14 Sonoma or later · Apple silicon &amp; Intel</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="maker">
+      <p class="maker-by">Made by <a href="https://github.com/erfanj" rel="me">@erfanj</a></p>
+      <p class="series">The <span>Basics Well Made</span> Series</p>
+    </div>
+    <p class="footer-meta">
+      © <span data-year>2026</span> Basics Well Made · Designed with love by <a href="https://github.com/erfanj">erfanj</a><br>
+      No cookies or analytics · Mac, macOS and Finder are trademarks of Apple Inc.
+    </p>
+  </div>
+</footer>
+</body>
+</html>
