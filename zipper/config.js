@@ -1,8 +1,13 @@
 // Site settings. This is the only file you need to edit.
 window.ZIPPER_SITE = {
-  // The public GitHub repository whose latest release holds Zipper-<version>.dmg.
-  // The source repository (erfanj/Zipper) is private, so DMGs are published here instead.
-  repo: "erfanj/zipper-releases",
+  // Every download button links straight to this DMG. For a new release, update these four lines.
+  // (index.html holds the same values as a fallback for visitors without JavaScript.)
+  download: {
+    url: "https://github.com/erfanj/Zipper/releases/download/v1.0.0/Zipper-1.0.0.dmg",
+    checksumUrl: "https://github.com/erfanj/Zipper/releases/download/v1.0.0/Zipper-1.0.0.dmg.sha256",
+    version: "1.0.0",
+    size: "14.5 MB",
+  },
 
   // Set to true once releases are signed and notarized with your Developer ID. While it's false,
   // the install steps explain macOS's "Open Anyway" step for unsigned apps.

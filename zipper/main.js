@@ -2,86 +2,26 @@
   "use strict";
 
   const cfg = Object.assign(
-    { repo: "erfanj/Zipper", notarized: false, requirements: "macOS 14 Sonoma or later" },
+    { notarized: false, requirements: "macOS 14 Sonoma or later" },
     window.ZIPPER_SITE || {}
   );
   const root = document.documentElement;
   root.dataset.notarized = String(Boolean(cfg.notarized));
 
-  // ---------- Download button: link to the latest release's DMG ----------
+  // ---------- Download buttons: direct link to the DMG in config.js ----------
 
-  const releasesPage = `https://github.com/${cfg.repo}/releases/latest`;
-  const links = document.querySelectorAll("[data-download]");
-  const metas = document.querySelectorAll("[data-release-meta]");
-  const dmgNames = document.querySelectorAll("[data-dmg-name]");
-  const checksums = document.querySelectorAll("[data-checksum]");
-
-  links.forEach((a) => (a.href = releasesPage));
-  metas.forEach((el) => (el.textContent = `${cfg.requirements} · Apple silicon & Intel`));
-
-  const formatSize = (bytes) => {
-    if (!bytes) return "";
-    const mb = bytes / 1048576;
-    return mb >= 10 ? `${Math.round(mb)} MB` : `${mb.toFixed(1)} MB`;
-  };
-
-  const apply = (release) => {
-    const assets = release.assets || [];
-    const dmg = assets.find((a) => /\.dmg$/i.test(a.name));
-    if (!dmg) return;
-    const version = String(release.tag_name || "").replace(/^v/i, "");
-    links.forEach((a) => {
-      a.href = dmg.browser_download_url;
-      a.setAttribute("download", "");
-    });
-    const parts = [version && `Version ${version}`, formatSize(dmg.size), cfg.requirements].filter(Boolean);
-    metas.forEach((el) => (el.textContent = parts.join(" · ")));
-    dmgNames.forEach((el) => (el.textContent = dmg.name));
-    const sum = assets.find((a) => /\.dmg\.sha256$/i.test(a.name));
-    if (sum) {
-      checksums.forEach((a) => {
-        a.href = sum.browser_download_url;
-        a.hidden = false;
-      });
-    }
-  };
-
-  const CACHE_KEY = `zipper-release:${cfg.repo}`;
-  let cached = null;
-  try {
-    const raw = sessionStorage.getItem(CACHE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Date.now() - parsed.at < 10 * 60 * 1000) cached = parsed.release;
-    }
-  } catch (_) {
-    /* storage unavailable: fetch instead */
+  const dl = cfg.download || {};
+  if (dl.url) {
+    document.querySelectorAll("[data-download]").forEach((a) => (a.href = dl.url));
+    const name = dl.url.split("/").pop();
+    document.querySelectorAll("[data-dmg-name]").forEach((el) => (el.textContent = name));
   }
-
-  if (cached) {
-    apply(cached);
-  } else if (window.fetch) {
-    fetch(`https://api.github.com/repos/${cfg.repo}/releases/latest`, {
-      headers: { Accept: "application/vnd.github+json" },
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((release) => {
-        if (!release) return;
-        const slim = {
-          tag_name: release.tag_name,
-          assets: (release.assets || []).map(({ name, size, browser_download_url }) => ({ name, size, browser_download_url })),
-        };
-        apply(slim);
-        try {
-          sessionStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), release: slim }));
-        } catch (_) {
-          /* ignore */
-        }
-      })
-      .catch(() => {
-        /* offline or rate-limited: the releases-page link stays */
-      });
-  }
+  const meta = [dl.version && `Version ${dl.version}`, dl.size, cfg.requirements].filter(Boolean).join(" · ");
+  document.querySelectorAll("[data-release-meta]").forEach((el) => (el.textContent = meta));
+  document.querySelectorAll("[data-checksum]").forEach((a) => {
+    if (dl.checksumUrl) a.href = dl.checksumUrl;
+    a.hidden = !dl.checksumUrl;
+  });
 
   // ---------- App window illustrations: scale a fixed-size design to fit ----------
 
